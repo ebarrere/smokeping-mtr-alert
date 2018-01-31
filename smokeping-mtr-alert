@@ -28,6 +28,7 @@ import subprocess
 import sys
 
 from email.mime.text import MIMEText
+from subprocess import PIPE,Popen
 
 if __name__ == "__main__":
 
@@ -57,7 +58,8 @@ RTT: {rtt}"""
 
     mtr_command = "mtr -n --report %s" % pipes.quote(args.hostname)
     try:
-        mtr_output = subprocess.check_output(mtr_command.split()).strip()
+        proc = Popen(mtr_command.split(), stdout=PIPE)
+        mtr_output = proc.communicate()[0]
     except:
         sys.stderr.write('error running MTR.\n')
         sys.exit(1)
